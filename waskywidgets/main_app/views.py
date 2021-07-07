@@ -11,9 +11,7 @@ from main_app import models
 def index (request):
     widget = Widget.objects.all()
     total_quantity = Widget.objects.all().aggregate(Sum('quantity'))
-    print(total_quantity)
     total_quantity_num = total_quantity['quantity__sum']
-    print(widget)
     widget_form = WidgetForm()
     return render(request, 'index.html',{
         'widget': widget, 'widget_form': widget_form,
