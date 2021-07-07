@@ -1,9 +1,34 @@
-from django.shortcuts import render
-# from django.views.generic import ListView
+from django.shortcuts import redirect, render
+from .models import Widget
+from .forms import WidgetForm
+from django.views.generic.edit import DeleteView
+from django.db.models import Sum
 
-# Create your views here.
 
+from main_app import models
 
 
 def index (request):
-  return render(request, 'index.html')
+    widget = Widget.objects.all()
+    total_quantity = Widget.objects.all().aggregate(Sum('quantity'))
+    print(total_quantity)
+    total_quantity_num = total_quantity['quantity__sum']
+    print(widget)
+    widget_form = WidgetForm()
+    return render(request, 'index.html',{
+        'widget': widget, 'widget_form': widget_form,
+        'total_quantity': total_quantity_num
+  })
+
+def widget_create(request):
+  form = WidgetForm(request.POST)
+  if form.is_valid():
+    new_widget = form.save(commit=False)
+    print(new_widget)
+    new_widget.save()
+  return redirect('/')
+
+
+class WidgetDelete(DeleteView):
+    model = Widget
+    success_url = '/'

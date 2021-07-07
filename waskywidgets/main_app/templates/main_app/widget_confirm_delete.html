@@ -1,0 +1,9 @@
+<h1>Delete Widget</h1>
+
+  
+  <form action="" method="POST">
+    <h4>Are you sure you want to delete <span class="teal-text">{{ object.description }}</span>?</h4>
+    {% csrf_token %}
+    <input type="submit" value="Yes - Delete!" class="btn">
+    <a href="{% url 'index' %}">Cancel</a>
+  </form>
